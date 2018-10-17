@@ -71,6 +71,15 @@ namespace RoseOnline
         [DllImport("user32.dll")]
         public static extern bool IsWindowVisible(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
+        [DllImport("user32.dll")]
+        public static extern int PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
         public delegate bool EnumDelegate(IntPtr hWnd, int lParam);
 
 
@@ -79,8 +88,9 @@ namespace RoseOnline
             public IntPtr hWnd;
             public string className;
         }
+        List<wndList> collection = new List<wndList>();
 
-        POINT p;
+        List<int> list_keys = new List<int>();
 
 
         public frmMain()
@@ -90,7 +100,28 @@ namespace RoseOnline
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var collection = new List<wndList>();
+            list_keys.Add(Constants.VK_F1);
+            list_keys.Add(Constants.VK_F2);
+            list_keys.Add(Constants.VK_F3);
+            list_keys.Add(Constants.VK_F4);
+            list_keys.Add(Constants.VK_F5);
+            list_keys.Add(Constants.VK_F6);
+            list_keys.Add(Constants.VK_F7);
+            list_keys.Add(Constants.VK_F8);
+            list_keys.Add(Constants.VK_F9);
+            list_keys.Add(Constants.VK_F10);
+            list_keys.Add(Constants.VK_F11);
+            list_keys.Add(Constants.VK_F12);
+
+            GetWindows();
+        }
+
+        private void GetWindows()
+        {
+            cbo_list.Items.Clear();
+            lb_handleno.Text = "";
+            lb_classname.Text = "";
+
             EnumDelegate filter = delegate (IntPtr hWnd, int lParam)
             {
                 StringBuilder strbTitle = new StringBuilder(255);
@@ -104,6 +135,7 @@ namespace RoseOnline
                     wnd.className = strTitle;
                     collection.Add(wnd);
                 }
+
                 return true;
             };
 
@@ -111,49 +143,9 @@ namespace RoseOnline
             {
                 foreach (var item in collection)
                 {
-                    cbList.Items.Add(item.className);
+                    cbo_list.Items.Add(item.className);
                 }
             }
-
-
-
-            /*
-            bool retVal = GetCursorPos(ref p);
-            if (retVal)
-            {
-                //lblXPos.Text = "Mouse X : " + Convert.ToString(p.X);
-                //lblYPos.Text = "Mouse Y : " + Convert.ToString(p.Y);
-                IntPtr hWnd = WindowFromPoint(p);
-                //lblHWnd.Text = "Window Handle : " + hwnd.ToInt64();
-                if (hWnd != IntPtr.Zero)
-                {
-
-                    //int length = GetWindowTextLength(hWnd);
-                    //StringBuilder sb = new StringBuilder(length + 1);
-                    //GetWindowText(hWnd, sb, sb.Capacity);
-
-
-                    //StringBuilder sbWinText = new StringBuilder(255);
-                    //GetWindowText(hWnd, sbWinText, 255);
-
-
-
-                    //rtbCaption.Text = GetCaptionOfWindow(hwnd);
-                    //rtbClassName.Text = GetClassNameOfWindow(hwnd);
-                    string a = GetCaptionOfWindow(hWnd);
-                    string b = GetClassNameOfWindow(hWnd);
-
-                    //For Parent 
-                    //IntPtr hWndParent = GetParent(hwnd);
-                    //if (hWndParent.ToInt64() > 0)
-                    {
-                        //rtbWinParent.Text = GetCaptionOfWindow(hWndParent);
-                    }
-                }
-            }
-            */
-
-
         }
 
         private string GetCaptionOfWindow(IntPtr hwnd)
@@ -203,8 +195,110 @@ namespace RoseOnline
             }
             return className;
         }
+
+        private IntPtr GetHandle()
+        {
+            return collection[cbo_list.SelectedIndex].hWnd;
+        }
+
+        private string GetWindowName()
+        {
+            return collection[cbo_list.SelectedIndex].className;
+        }
+
+        private void SendKey(IntPtr hWnd, int key)
+        {
+            PostMessage(hWnd, Constants.WM_KEYDOWN, key, 0);
+            PostMessage(hWnd, Constants.WM_KEYUP, key, 0);
+        }
+
+        private void btn_reload_Click(object sender, EventArgs e)
+        {
+            GetWindows();
+        }
+
+        private void btn_start_Click(object sender, EventArgs e)
+        {
+            if (ckb_1.Checked && cbo_key_1.SelectedIndex >= 0)
+            {
+                timer1.Interval = int.Parse(num_1.Value.ToString()) * 1000;
+                timer1.Enabled = true;
+            }
+
+            if (ckb_2.Checked && cbo_key_2.SelectedIndex >= 0)
+            {
+                timer2.Interval = int.Parse(num_2.Value.ToString()) * 1000;
+                timer2.Enabled = true;
+            }
+
+            if (ckb_3.Checked && cbo_key_3.SelectedIndex >= 0)
+            {
+                timer3.Interval = int.Parse(num_3.Value.ToString()) * 1000;
+                timer3.Enabled = true;
+            }
+
+            if (ckb_4.Checked && cbo_key_4.SelectedIndex >= 0)
+            {
+                timer4.Interval = int.Parse(num_4.Value.ToString()) * 1000;
+                timer4.Enabled = true;
+            }
+
+            if (ckb_5.Checked && cbo_key_5.SelectedIndex >= 0)
+            {
+                timer5.Interval = int.Parse(num_5.Value.ToString()) * 1000;
+                timer5.Enabled = true;
+            }
+
+        }
+
+        private void btn_stop_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = false;
+            timer2.Enabled = false;
+            timer3.Enabled = false;
+            timer4.Enabled = false;
+            timer5.Enabled = false;
+        }
+
+        private void btn_check_Click(object sender, EventArgs e)
+        {
+            SetForegroundWindow(GetHandle());
+        }
+
+        private void cbo_list_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lb_handleno.Text = GetHandle().ToString();
+            lb_classname.Text = GetWindowName();
+        }
+
+
+        #region [TIMER]
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            SendKey(GetHandle(), list_keys[cbo_key_1.SelectedIndex]);
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            SendKey(GetHandle(), list_keys[cbo_key_2.SelectedIndex]);
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            SendKey(GetHandle(), list_keys[cbo_key_3.SelectedIndex]);
+        }
+
+        private void timer4_Tick(object sender, EventArgs e)
+        {
+            SendKey(GetHandle(), list_keys[cbo_key_4.SelectedIndex]);
+        }
+
+        private void timer5_Tick(object sender, EventArgs e)
+        {
+            SendKey(GetHandle(), list_keys[cbo_key_5.SelectedIndex]);
+        }
+        #endregion [TIMER]
+
         
-
-
     }
 }
