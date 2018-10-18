@@ -212,6 +212,18 @@ namespace RoseOnline
             PostMessage(hWnd, Constants.WM_KEYUP, key, 0);
         }
 
+        private void SendLbutton(IntPtr hWnd)
+        {
+            PostMessage(hWnd, Constants.WM_LBUTTONDOWN, 0, 0);
+            PostMessage(hWnd, Constants.WM_LBUTTONUP, 0, 0);
+        }
+
+        private void SendRbutton(IntPtr hWnd)
+        {
+            PostMessage(hWnd, Constants.WM_RBUTTONDOWN, 0, 0);
+            PostMessage(hWnd, Constants.WM_RBUTTONUP, 0, 0);
+        }
+
         private void btn_reload_Click(object sender, EventArgs e)
         {
             GetWindows();
@@ -219,36 +231,42 @@ namespace RoseOnline
 
         private void btn_start_Click(object sender, EventArgs e)
         {
-            if (ckb_1.Checked && cbo_key_1.SelectedIndex >= 0)
+            if (ckb_1.Checked && cbo_key_1.SelectedIndex >= 0 && num_1.Value > 0)
             {
                 timer1.Interval = int.Parse(num_1.Value.ToString()) * 1000;
                 timer1.Enabled = true;
             }
-
-            if (ckb_2.Checked && cbo_key_2.SelectedIndex >= 0)
+            if (ckb_2.Checked && cbo_key_2.SelectedIndex >= 0 && num_2.Value > 0)
             {
                 timer2.Interval = int.Parse(num_2.Value.ToString()) * 1000;
                 timer2.Enabled = true;
             }
-
-            if (ckb_3.Checked && cbo_key_3.SelectedIndex >= 0)
+            if (ckb_3.Checked && cbo_key_3.SelectedIndex >= 0 && num_3.Value > 0)
             {
                 timer3.Interval = int.Parse(num_3.Value.ToString()) * 1000;
                 timer3.Enabled = true;
             }
-
-            if (ckb_4.Checked && cbo_key_4.SelectedIndex >= 0)
+            if (ckb_4.Checked && cbo_key_4.SelectedIndex >= 0 && num_4.Value > 0)
             {
                 timer4.Interval = int.Parse(num_4.Value.ToString()) * 1000;
                 timer4.Enabled = true;
             }
-
-            if (ckb_5.Checked && cbo_key_5.SelectedIndex >= 0)
+            if (ckb_5.Checked && cbo_key_5.SelectedIndex >= 0 && num_5.Value > 0)
             {
                 timer5.Interval = int.Parse(num_5.Value.ToString()) * 1000;
                 timer5.Enabled = true;
             }
 
+            if (ckb_rbutton.Checked && num_rbutton.Value > 0)
+            {
+                timer_rbutton.Interval = int.Parse(num_rbutton.Value.ToString()) * 1000;
+                timer_rbutton.Enabled = true;
+            }
+            if (ckb_space.Checked && num_space.Value > 0)
+            {
+                timer_space.Interval = int.Parse(num_space.Value.ToString()) * 1000;
+                timer_space.Enabled = true;
+            }
         }
 
         private void btn_stop_Click(object sender, EventArgs e)
@@ -258,6 +276,9 @@ namespace RoseOnline
             timer3.Enabled = false;
             timer4.Enabled = false;
             timer5.Enabled = false;
+
+            timer_rbutton.Enabled = false;
+            timer_space.Enabled = false;
         }
 
         private void btn_check_Click(object sender, EventArgs e)
@@ -297,8 +318,19 @@ namespace RoseOnline
         {
             SendKey(GetHandle(), list_keys[cbo_key_5.SelectedIndex]);
         }
+
+        private void timer_rbutton_Tick(object sender, EventArgs e)
+        {
+            SendRbutton(GetHandle());
+        }
+
+        private void timer_space_Tick(object sender, EventArgs e)
+        {
+            SendKey(GetHandle(), Constants.VK_SPACE);
+        }
+
         #endregion [TIMER]
 
-        
+
     }
 }
