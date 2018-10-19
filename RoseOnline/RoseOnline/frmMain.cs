@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -38,6 +39,9 @@ namespace RoseOnline
                 return new POINT(p.X, p.Y);
             }
         }
+
+
+        #region [DLL]
 
         [DllImport("user32.dll")]
         public static extern IntPtr WindowFromPoint(POINT p);
@@ -80,9 +84,23 @@ namespace RoseOnline
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+
+
+        [DllImport("kernel32")]
+        private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
+        [DllImport("kernel32")]
+        private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal,
+                                                        int size, string filePath);
+
         public delegate bool EnumDelegate(IntPtr hWnd, int lParam);
 
+        #endregion [DLL]
 
+
+
+        #region [VAR]
         class wndList
         {
             public IntPtr hWnd;
@@ -91,6 +109,17 @@ namespace RoseOnline
         List<wndList> collection = new List<wndList>();
 
         List<int> list_keys = new List<int>();
+
+        string CON_DATFILE_DIR = Environment.CurrentDirectory + @"\DAT\";
+
+        int m_count_1;
+        int m_count_2;
+        int m_count_3;
+        int m_count_4;
+        int m_count_5;
+        int m_count_rbutton;
+        int m_count_space;
+        #endregion [VAR]
 
 
         public frmMain()
@@ -114,6 +143,7 @@ namespace RoseOnline
             list_keys.Add(Constants.VK_F12);
 
             GetWindows();
+            GetDatFileList();
         }
 
         private void GetWindows()
@@ -212,43 +242,76 @@ namespace RoseOnline
             PostMessage(hWnd, Constants.WM_KEYUP, key, 0);
         }
 
+        private void SendLbutton(IntPtr hWnd)
+        {
+            PostMessage(hWnd, Constants.WM_LBUTTONDOWN, 0, 0);
+            PostMessage(hWnd, Constants.WM_LBUTTONUP, 0, 0);
+        }
+
+        private void SendRbutton(IntPtr hWnd)
+        {
+            PostMessage(hWnd, Constants.WM_RBUTTONDOWN, 0, 0);
+            PostMessage(hWnd, Constants.WM_RBUTTONUP, 0, 0);
+        }
+
         private void btn_reload_Click(object sender, EventArgs e)
         {
             GetWindows();
+            GetDatFileList();
         }
 
         private void btn_start_Click(object sender, EventArgs e)
         {
-            if (ckb_1.Checked && cbo_key_1.SelectedIndex >= 0)
+            if (ckb_1.Checked && cbo_key_1.SelectedIndex >= 0 && num_1.Value > 0)
             {
+                m_count_1 = int.Parse(num_1.Value.ToString());
                 timer1.Interval = int.Parse(num_1.Value.ToString()) * 1000;
                 timer1.Enabled = true;
             }
-
-            if (ckb_2.Checked && cbo_key_2.SelectedIndex >= 0)
+            if (ckb_2.Checked && cbo_key_2.SelectedIndex >= 0 && num_2.Value > 0)
             {
+                m_count_2 = int.Parse(num_2.Value.ToString());
                 timer2.Interval = int.Parse(num_2.Value.ToString()) * 1000;
                 timer2.Enabled = true;
             }
-
-            if (ckb_3.Checked && cbo_key_3.SelectedIndex >= 0)
+            if (ckb_3.Checked && cbo_key_3.SelectedIndex >= 0 && num_3.Value > 0)
             {
+                m_count_3 = int.Parse(num_3.Value.ToString());
                 timer3.Interval = int.Parse(num_3.Value.ToString()) * 1000;
                 timer3.Enabled = true;
             }
-
-            if (ckb_4.Checked && cbo_key_4.SelectedIndex >= 0)
+            if (ckb_4.Checked && cbo_key_4.SelectedIndex >= 0 && num_4.Value > 0)
             {
+                m_count_4 = int.Parse(num_4.Value.ToString());
                 timer4.Interval = int.Parse(num_4.Value.ToString()) * 1000;
                 timer4.Enabled = true;
             }
-
-            if (ckb_5.Checked && cbo_key_5.SelectedIndex >= 0)
+            if (ckb_5.Checked && cbo_key_5.SelectedIndex >= 0 && num_5.Value > 0)
             {
+                m_count_5 = int.Parse(num_5.Value.ToString());
                 timer5.Interval = int.Parse(num_5.Value.ToString()) * 1000;
                 timer5.Enabled = true;
             }
 
+            if (ckb_rbutton.Checked && num_rbutton.Value > 0)
+            {
+                m_count_rbutton = int.Parse(num_rbutton.Value.ToString());
+                timer_rbutton.Interval = int.Parse(num_rbutton.Value.ToString()) * 1000;
+                timer_rbutton.Enabled = true;
+            }
+            if (ckb_space.Checked && num_space.Value > 0)
+            {
+                m_count_space = int.Parse(num_space.Value.ToString());
+                timer_space.Interval = int.Parse(num_space.Value.ToString()) * 1000;
+                timer_space.Enabled = true;
+            }
+
+            timer_main.Enabled = true;
+
+            if (string.IsNullOrEmpty(tb_datname.Text) == false)
+            {
+                SaveDatFile(tb_datname.Text);
+            }
         }
 
         private void btn_stop_Click(object sender, EventArgs e)
@@ -258,10 +321,19 @@ namespace RoseOnline
             timer3.Enabled = false;
             timer4.Enabled = false;
             timer5.Enabled = false;
+
+            timer_rbutton.Enabled = false;
+            timer_space.Enabled = false;
+
+            timer_main.Enabled = false;
         }
 
         private void btn_check_Click(object sender, EventArgs e)
         {
+            // 윈도우가 최소화 되어 있다면 활성화 시킨다
+            ShowWindowAsync(GetHandle(), Constants.SW_SHOWNORMAL);
+
+            // 윈도우에 포커스를 줘서 최상위로 만든다
             SetForegroundWindow(GetHandle());
         }
 
@@ -272,7 +344,197 @@ namespace RoseOnline
         }
 
 
+        #region [DAT FILE]        
+
+        private void LoadDatFile(string filename)
+        {
+            tb_datname.Text = filename;
+
+            string sFilename = filename + ".dat";
+            string sFilepath = CON_DATFILE_DIR + sFilename;
+
+            StringBuilder sCKB = new StringBuilder();
+            StringBuilder sCBO = new StringBuilder();
+            StringBuilder sNUM = new StringBuilder();
+
+            GetPrivateProfileString("FUNC_1", "ckb_1", "False", sCKB, 255, sFilepath);
+            GetPrivateProfileString("FUNC_1", "cbo_key_1", "-1", sCBO, 255, sFilepath);
+            GetPrivateProfileString("FUNC_1", "num_1", "1", sNUM, 255, sFilepath);
+            ckb_1.Checked = bool.Parse(sCKB.ToString());
+            cbo_key_1.SelectedIndex = int.Parse(sCBO.ToString());
+            num_1.Value = int.Parse(sNUM.ToString());
+
+            GetPrivateProfileString("FUNC_2", "ckb_2", "False", sCKB, 255, sFilepath);
+            GetPrivateProfileString("FUNC_2", "cbo_key_2", "-1", sCBO, 255, sFilepath);
+            GetPrivateProfileString("FUNC_2", "num_2", "1", sNUM, 255, sFilepath);
+            ckb_2.Checked = bool.Parse(sCKB.ToString());
+            cbo_key_2.SelectedIndex = int.Parse(sCBO.ToString());
+            num_2.Value = int.Parse(sNUM.ToString());
+
+            GetPrivateProfileString("FUNC_3", "ckb_3", "False", sCKB, 255, sFilepath);
+            GetPrivateProfileString("FUNC_3", "cbo_key_3", "-1", sCBO, 255, sFilepath);
+            GetPrivateProfileString("FUNC_3", "num_3", "1", sNUM, 255, sFilepath);
+            ckb_3.Checked = bool.Parse(sCKB.ToString());
+            cbo_key_3.SelectedIndex = int.Parse(sCBO.ToString());
+            num_3.Value = int.Parse(sNUM.ToString());
+
+            GetPrivateProfileString("FUNC_4", "ckb_4", "False", sCKB, 255, sFilepath);
+            GetPrivateProfileString("FUNC_4", "cbo_key_4", "-1", sCBO, 255, sFilepath);
+            GetPrivateProfileString("FUNC_4", "num_4", "1", sNUM, 255, sFilepath);
+            ckb_4.Checked = bool.Parse(sCKB.ToString());
+            cbo_key_4.SelectedIndex = int.Parse(sCBO.ToString());
+            num_4.Value = int.Parse(sNUM.ToString());
+
+            GetPrivateProfileString("FUNC_5", "ckb_5", "False", sCKB, 255, sFilepath);
+            GetPrivateProfileString("FUNC_5", "cbo_key_5", "-1", sCBO, 255, sFilepath);
+            GetPrivateProfileString("FUNC_5", "num_5", "1", sNUM, 255, sFilepath);
+            ckb_5.Checked = bool.Parse(sCKB.ToString());
+            cbo_key_5.SelectedIndex = int.Parse(sCBO.ToString());
+            num_5.Value = int.Parse(sNUM.ToString());
+
+            GetPrivateProfileString("FUNC_RBUTTON", "ckb_rbutton", "False", sCKB, 255, sFilepath);
+            GetPrivateProfileString("FUNC_RBUTTON", "num_rbutton", "1", sNUM, 255, sFilepath);
+            ckb_rbutton.Checked = bool.Parse(sCKB.ToString());
+            num_rbutton.Value = int.Parse(sNUM.ToString());
+
+            GetPrivateProfileString("FUNC_SPACE", "ckb_space", "False", sCKB, 255, sFilepath);
+            GetPrivateProfileString("FUNC_SPACE", "num_space", "1", sNUM, 255, sFilepath);
+            ckb_space.Checked = bool.Parse(sCKB.ToString());
+            num_space.Value = int.Parse(sNUM.ToString());
+        }
+
+        private void SaveDatFile(string sName)
+        {
+            if (!Directory.Exists(CON_DATFILE_DIR))
+            {
+                Directory.CreateDirectory(CON_DATFILE_DIR);
+            }
+
+            string sFilename = sName + ".dat";
+            string sFilepath = CON_DATFILE_DIR + sFilename;
+
+            WritePrivateProfileString("FUNC_1", "ckb_1", ckb_1.Checked.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_1", "cbo_key_1", cbo_key_1.SelectedIndex.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_1", "num_1", num_1.Value.ToString(), sFilepath);
+
+            WritePrivateProfileString("FUNC_2", "ckb_2", ckb_2.Checked.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_2", "cbo_key_2", cbo_key_2.SelectedIndex.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_2", "num_2", num_2.Value.ToString(), sFilepath);
+
+            WritePrivateProfileString("FUNC_3", "ckb_3", ckb_3.Checked.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_3", "cbo_key_3", cbo_key_3.SelectedIndex.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_3", "num_3", num_3.Value.ToString(), sFilepath);
+
+            WritePrivateProfileString("FUNC_4", "ckb_4", ckb_4.Checked.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_4", "cbo_key_4", cbo_key_4.SelectedIndex.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_4", "num_4", num_4.Value.ToString(), sFilepath);
+
+            WritePrivateProfileString("FUNC_5", "ckb_5", ckb_5.Checked.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_5", "cbo_key_5", cbo_key_5.SelectedIndex.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_5", "num_5", num_5.Value.ToString(), sFilepath);
+
+            WritePrivateProfileString("FUNC_RBUTTON", "ckb_rbutton", ckb_rbutton.Checked.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_RBUTTON", "num_rbutton", num_rbutton.Value.ToString(), sFilepath);
+
+            WritePrivateProfileString("FUNC_SPACE", "ckb_space", ckb_space.Checked.ToString(), sFilepath);
+            WritePrivateProfileString("FUNC_SPACE", "num_space", num_space.Value.ToString(), sFilepath);
+        }
+
+        private void GetDatFileList()
+        {
+            cbo_datlist.Items.Clear();
+
+            DirectoryInfo di = new DirectoryInfo(CON_DATFILE_DIR);
+            foreach (var item in di.GetFiles())
+            {
+                string sName = item.Name.Split('.')[0];
+                cbo_datlist.Items.Add(sName);
+            }
+        }
+
+        private void cbo_datlist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string sFilename = cbo_datlist.SelectedItem.ToString();
+            LoadDatFile(sFilename);
+        }
+        #endregion [DAT FILE]
+
+
+
         #region [TIMER]
+        private void timer_main_Tick(object sender, EventArgs e)
+        {
+            if (m_count_1 > 0)
+            {
+                m_count_1--;
+                lb_1.Text = m_count_1.ToString();
+                if (m_count_1 == 0)
+                {
+                    m_count_1 = int.Parse(num_1.Value.ToString());
+                }
+            }
+
+            if (m_count_2 > 0)
+            {
+                m_count_2--;
+                lb_2.Text = m_count_2.ToString();
+                if (m_count_2 == 0)
+                {
+                    m_count_2 = int.Parse(num_2.Value.ToString());
+                }
+            }
+
+            if (m_count_3 > 0)
+            {
+                m_count_3--;
+                lb_3.Text = m_count_3.ToString();
+                if (m_count_3 == 0)
+                {
+                    m_count_3 = int.Parse(num_3.Value.ToString());
+                }
+            }
+
+            if (m_count_4 > 0)
+            {
+                m_count_4--;
+                lb_4.Text = m_count_4.ToString();
+                if (m_count_4 == 0)
+                {
+                    m_count_4 = int.Parse(num_4.Value.ToString());
+                }
+            }
+
+            if (m_count_5 > 0)
+            {
+                m_count_5--;
+                lb_5.Text = m_count_5.ToString();
+                if (m_count_5 == 0)
+                {
+                    m_count_5 = int.Parse(num_5.Value.ToString());
+                }
+            }
+
+            if (m_count_rbutton > 0)
+            {
+                m_count_rbutton--;
+                lb_rbutton.Text = m_count_rbutton.ToString();
+                if (m_count_rbutton == 0)
+                {
+                    m_count_rbutton = int.Parse(num_rbutton.Value.ToString());
+                }
+            }
+
+            if (m_count_space > 0)
+            {
+                m_count_space--;
+                lb_space.Text = m_count_space.ToString();
+                if (m_count_space == 0)
+                {
+                    m_count_space = int.Parse(num_space.Value.ToString());
+                }
+            }
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             SendKey(GetHandle(), list_keys[cbo_key_1.SelectedIndex]);
@@ -297,8 +559,21 @@ namespace RoseOnline
         {
             SendKey(GetHandle(), list_keys[cbo_key_5.SelectedIndex]);
         }
+
+        private void timer_rbutton_Tick(object sender, EventArgs e)
+        {
+            SendRbutton(GetHandle());
+        }
+
+        private void timer_space_Tick(object sender, EventArgs e)
+        {
+            SendKey(GetHandle(), Constants.VK_SPACE);
+        }
+
+
         #endregion [TIMER]
 
         
+
     }
 }

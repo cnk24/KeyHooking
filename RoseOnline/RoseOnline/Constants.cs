@@ -8,6 +8,11 @@ namespace RoseOnline
 {
     public class Constants
     {
+        public const int SW_SHOWNORMAL = 1;
+        public const int SW_SHOWMINIMIZED = 2;
+        public const int SW_SHOWMAXIMIZED = 3;
+
+
         #region SendMessage Constants
 
         public const int WM_LBUTTONDOWN = 0x0201;
