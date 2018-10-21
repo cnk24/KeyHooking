@@ -7,16 +7,6 @@ E:\1. Project\4. C# Project\RoseOnline\RoseOnline\RoseOnline\obj\Debug\RoseOnlin
 E:\1. Project\4. C# Project\RoseOnline\RoseOnline\RoseOnline\obj\Debug\RoseOnline.exe
 E:\1. Project\4. C# Project\RoseOnline\RoseOnline\RoseOnline\obj\Debug\RoseOnline.pdb
 E:\1. Project\4. C# Project\RoseOnline\RoseOnline\RoseOnline\obj\Debug\RoseOnline.frmMain.resources
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.exe.config
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.exe
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.pdb
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csprojAssemblyReference.cache
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.frmMain.resources
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.Properties.Resources.resources
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csproj.GenerateResource.cache
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csproj.CoreCompileInputs.cache
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.exe
-D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.pdb
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.exe.config
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.exe
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.pdb
@@ -26,3 +16,12 @@ E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.P
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csproj.GenerateResource.Cache
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.exe
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.pdb
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.exe.config
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.exe
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.pdb
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.frmMain.resources
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.Properties.Resources.resources
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csproj.GenerateResource.cache
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csproj.CoreCompileInputs.cache
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.exe
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.pdb

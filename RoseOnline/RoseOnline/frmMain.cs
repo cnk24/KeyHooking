@@ -149,6 +149,7 @@ namespace RoseOnline
         private void GetWindows()
         {
             cbo_list.Items.Clear();
+            collection.Clear();
             lb_handleno.Text = "";
             lb_classname.Text = "";
 
