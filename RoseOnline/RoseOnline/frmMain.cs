@@ -312,6 +312,14 @@ namespace RoseOnline
             {
                 SaveDatFile(tb_datname.Text);
             }
+
+
+            foreach (Control c in this.Controls)
+            {
+                c.Enabled = false;
+            }
+            btn_stop.Enabled = true;
+
         }
 
         private void btn_stop_Click(object sender, EventArgs e)
@@ -326,6 +334,11 @@ namespace RoseOnline
             timer_space.Enabled = false;
 
             timer_main.Enabled = false;
+
+            foreach (Control c in this.Controls)
+            {
+                c.Enabled = true;
+            }
         }
 
         private void btn_check_Click(object sender, EventArgs e)
@@ -348,6 +361,11 @@ namespace RoseOnline
 
         private void LoadDatFile(string filename)
         {
+            if (!Directory.Exists(CON_DATFILE_DIR))
+            {
+                Directory.CreateDirectory(CON_DATFILE_DIR);
+            }
+
             tb_datname.Text = filename;
 
             string sFilename = filename + ".dat";
@@ -442,6 +460,11 @@ namespace RoseOnline
 
         private void GetDatFileList()
         {
+            if (!Directory.Exists(CON_DATFILE_DIR))
+            {
+                Directory.CreateDirectory(CON_DATFILE_DIR);
+            }
+
             cbo_datlist.Items.Clear();
 
             DirectoryInfo di = new DirectoryInfo(CON_DATFILE_DIR);
@@ -464,7 +487,7 @@ namespace RoseOnline
         #region [TIMER]
         private void timer_main_Tick(object sender, EventArgs e)
         {
-            if (m_count_1 > 0)
+            if (m_count_1 > 0 && ckb_1.Checked)
             {
                 m_count_1--;
                 lb_1.Text = m_count_1.ToString();
@@ -474,7 +497,7 @@ namespace RoseOnline
                 }
             }
 
-            if (m_count_2 > 0)
+            if (m_count_2 > 0 && ckb_2.Checked)
             {
                 m_count_2--;
                 lb_2.Text = m_count_2.ToString();
@@ -484,7 +507,7 @@ namespace RoseOnline
                 }
             }
 
-            if (m_count_3 > 0)
+            if (m_count_3 > 0 && ckb_3.Checked)
             {
                 m_count_3--;
                 lb_3.Text = m_count_3.ToString();
@@ -494,7 +517,7 @@ namespace RoseOnline
                 }
             }
 
-            if (m_count_4 > 0)
+            if (m_count_4 > 0 && ckb_4.Checked)
             {
                 m_count_4--;
                 lb_4.Text = m_count_4.ToString();
@@ -504,7 +527,7 @@ namespace RoseOnline
                 }
             }
 
-            if (m_count_5 > 0)
+            if (m_count_5 > 0 && ckb_5.Checked)
             {
                 m_count_5--;
                 lb_5.Text = m_count_5.ToString();
@@ -514,7 +537,7 @@ namespace RoseOnline
                 }
             }
 
-            if (m_count_rbutton > 0)
+            if (m_count_rbutton > 0 && ckb_rbutton.Checked)
             {
                 m_count_rbutton--;
                 lb_rbutton.Text = m_count_rbutton.ToString();
@@ -524,7 +547,7 @@ namespace RoseOnline
                 }
             }
 
-            if (m_count_space > 0)
+            if (m_count_space > 0 && ckb_space.Checked)
             {
                 m_count_space--;
                 lb_space.Text = m_count_space.ToString();

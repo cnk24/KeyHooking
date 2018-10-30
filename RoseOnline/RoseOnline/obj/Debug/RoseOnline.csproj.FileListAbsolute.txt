@@ -20,9 +20,9 @@ D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.pdb
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.exe.config
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.exe
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\bin\Debug\RoseOnline.pdb
-E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csprojResolveAssemblyReference.cache
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.frmMain.resources
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.Properties.Resources.resources
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csproj.GenerateResource.Cache
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.exe
 E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.pdb
+E:\1. Project\10. GitHub\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csprojResolveAssemblyReference.cache
