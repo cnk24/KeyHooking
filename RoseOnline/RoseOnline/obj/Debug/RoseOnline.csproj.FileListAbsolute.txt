@@ -25,3 +25,4 @@ D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csproj.GenerateR
 D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csproj.CoreCompileInputs.cache
 D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.exe
 D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.pdb
+D:\GITHUB\KeyHooking\RoseOnline\RoseOnline\obj\Debug\RoseOnline.csprojAssemblyReference.cache
