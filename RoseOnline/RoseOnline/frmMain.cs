@@ -291,44 +291,17 @@ namespace RoseOnline
                 SaveDatFile(tb_datname.Text);
             }
 
-<<<<<<< HEAD
-
-            foreach (Control c in this.Controls)
-            {
-                c.Enabled = false;
-            }
-            btn_stop.Enabled = true;
-
-=======
             SetOnlyList();
             SetGroupList();
 
             timer1.Enabled = true;
             UIEnable(false);
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
         }
 
         private void btn_stop_Click(object sender, EventArgs e)
         {
             timer1.Enabled = false;
-<<<<<<< HEAD
-            timer2.Enabled = false;
-            timer3.Enabled = false;
-            timer4.Enabled = false;
-            timer5.Enabled = false;
-
-            timer_rbutton.Enabled = false;
-            timer_space.Enabled = false;
-
-            timer_main.Enabled = false;
-
-            foreach (Control c in this.Controls)
-            {
-                c.Enabled = true;
-            }
-=======
             UIEnable(true);
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
         }
 
         private void btn_check_Click(object sender, EventArgs e)
@@ -351,14 +324,12 @@ namespace RoseOnline
 
         private void LoadDatFile(string filename)
         {
-<<<<<<< HEAD
-            if (!Directory.Exists(CON_DATFILE_DIR))
+            if (string.IsNullOrEmpty(filename)) return;
+			
+			if (!Directory.Exists(CON_DATFILE_DIR))
             {
                 Directory.CreateDirectory(CON_DATFILE_DIR);
             }
-=======
-            if (string.IsNullOrEmpty(filename)) return;
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
 
             tb_datname.Text = filename;
 
@@ -504,29 +475,21 @@ namespace RoseOnline
 
         private void dgv_only_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-<<<<<<< HEAD
-            if (m_count_1 > 0 && ckb_1.Checked)
-=======
             DataGridView dgv = sender as DataGridView;
             int nRowIndex = e.RowIndex;
             int nColIndex = e.ColumnIndex;
 
             if (dgv.Columns["col_only_del"].Index == nColIndex)
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
             {
                 dgv.Rows.RemoveAt(nRowIndex);
             }
         }        
 
-<<<<<<< HEAD
-            if (m_count_2 > 0 && ckb_2.Checked)
-=======
         private void SetOnlyList()
         {
             m_OnlyList.Clear();
 
             foreach (DataGridViewRow row in dgv_only.Rows)
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
             {
                 tClass tc = new tClass();
                 tc.bCheck = Convert.ToBoolean(row.Cells["col_only_check"].Value);
@@ -541,9 +504,6 @@ namespace RoseOnline
         #endregion [개별 콘드롤]
 
 
-<<<<<<< HEAD
-            if (m_count_3 > 0 && ckb_3.Checked)
-=======
 
 
 
@@ -585,11 +545,7 @@ namespace RoseOnline
             m_nGroupSec = Convert.ToInt32(tb_group_sec.Text);
             m_nGroupIng = m_nGroupSec;
 
-<<<<<<< HEAD
-            if (m_count_4 > 0 && ckb_4.Checked)
-=======
             foreach (DataGridViewRow row in dgv_group.Rows)
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
             {
                 tClass tc = new tClass();
                 tc.bCheck = Convert.ToBoolean(row.Cells["col_group_check"].Value);
@@ -612,11 +568,7 @@ namespace RoseOnline
         {
             int nRowIndex = 0;
 
-<<<<<<< HEAD
-            if (m_count_5 > 0 && ckb_5.Checked)
-=======
             foreach (tClass tc in m_OnlyList)
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
             {
                 if (tc.bCheck)
                 {
@@ -636,13 +588,9 @@ namespace RoseOnline
             }
         }
 
-<<<<<<< HEAD
-            if (m_count_rbutton > 0 && ckb_rbutton.Checked)
-=======
         private void GroupProc()
         {
             if (m_nGroupIng > 0)
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
             {
                 m_nGroupIng--;
                 lb_group_ing.Text = m_nGroupIng.ToString();
@@ -665,18 +613,10 @@ namespace RoseOnline
                     tc = m_GroupList[m_nGroupIndex];
                 }
 
-<<<<<<< HEAD
-            if (m_count_space > 0 && ckb_space.Checked)
-            {
-                m_count_space--;
-                lb_space.Text = m_count_space.ToString();
-                if (m_count_space == 0)
-=======
                 tc.nIng--;
                 dgv_group.Rows[m_nGroupIndex].Cells["col_group_ing"].Value = tc.nIng.ToString();
 
                 if (tc.nIng == 0)
->>>>>>> 5e4352146bfce17bd6b98b8ea81e4c8b2b15a069
                 {
                     SendKey(GetHandle(), tc.nKey);
                     tc.nIng = tc.nSec;
